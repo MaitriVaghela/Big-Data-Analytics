@@ -1,0 +1,14 @@
+import pandas as pd
+
+df = pd.read_csv('**\\adult_data_df_final.csv')
+dftest = pd.read_csv('**\\adult_test_df.csv')
+
+#creating files consisting of numerical values through one hot encoding
+dummies = pd.get_dummies(df, columns=["workclass","education","marital-status","occupation", "relationship", "race", "sex", "native-country", "Income",
+                                      "age_categ", "hours_per_week_categ", "capital_gain_categ", "capital_loss_categ"])
+
+dummiesTest = pd.get_dummies(dftest, columns=["workclass","education","marital-status","occupation", "relationship", "race", "sex", "native-country", "Income",
+                                      "age_categ", "hours_per_week_categ", "capital_gain_categ", "capital_loss_categ"])
+
+dummies.to_csv('adult_data_df_one_hot_encoding.csv')
+dummiesTest.to_csv('adult_test_df_one_hot_encoding.csv')
