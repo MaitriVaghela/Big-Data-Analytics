@@ -1,0 +1,44 @@
+#Conversion of continuous values into categories in test data file
+
+import pandas as pd
+import numpy as np
+  
+df = pd.read_excel('**\\adult.test.xlsx',na_values = '?')
+
+del df['fnwgt']
+del df['education-num']
+
+#age conversion 
+ageLabels = ["Young", "Middle Aged", "Senior", "Old"]
+ageBins = [0, 30, 50, 65, 100]
+df['age_categ'] = pd.cut(df['age'], ageBins, labels = ageLabels, right = True, include_lowest = True)
+
+#Hours per Week conversion
+hoursLabels = ["Part Time", "Full Time", "Over Time", "Over the limit"]
+hoursBins = [0, 20,40, 60, 100]
+df['hours_per_week_categ'] = pd.cut(df['hours-per-week'], hoursBins, labels = hoursLabels, right = True, include_lowest = True)
+
+#Capital Gain Conversion
+maxCapitalGain = np.max(df['capital-gain'])
+minCapitalGain = np.min(df['capital-gain'])
+lastValueGain = maxCapitalGain + 1
+firstValueGain =  minCapitalGain - 1
+gainBins = [firstValueGain, minCapitalGain,maxCapitalGain ,lastValueGain ]
+gainLabels = ['Low', 'Medium', 'High']
+df['capital_gain_categ'] = pd.cut(df['capital-gain'], gainBins, gainLabels )
+
+#Capital Loss Conversion
+maxCapitalLoss = np.max(df['capital-loss'])
+minCapitalLoss = np.min(df['capital-loss'])
+lastValueLoss = maxCapitalLoss + 1
+firstValueLoss = minCapitalLoss - 1
+lossBins = [firstValueLoss, minCapitalLoss,maxCapitalLoss , lastValueLoss ]
+lossLabels = ['Low', 'Medium', 'High']
+df['capital_loss_categ'] = pd.cut(df['capital-loss'], lossBins, lossLabels )
+
+del df['age']
+del df['hours-per-week']
+del df['capital-gain']
+del df['capital-loss']
+
+df.to_csv('adult_test_df.csv')
